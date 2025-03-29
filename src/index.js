@@ -13,7 +13,7 @@ import clienteRoutes from "./routes/ClienteRoutes.js";
 dotenv.config();
 
 const app = express();
-
+app.use(express.json());
 // Configurar el middleware de CORS. En este caso está para todos los dominios. 
 app.use(
   cors({

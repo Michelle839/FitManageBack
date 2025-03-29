@@ -1,16 +1,14 @@
 import cliente from "../models/Cliente.js";
 
 
+export async function listar() {
+    return await cliente.findAll();
+};
 
-        //con export ya se exportan las funciones automaticamente
-  export  async function listar() {
-        return await cliente.findAll(); // Obtiene de la bd todos los clientes
-    };
+export async function buscarPorCedula(dni) {
+    return await cliente.findByPk(dni);
+};
 
-   export async function buscarPorCedula(dni){
-        return await cliente.findByPk(dni);
-    };
-
-
-
-
+export async function registrarCliente(datosCliente) {
+    return await cliente.create(datosCliente);
+};
