@@ -9,12 +9,13 @@ import db from "./db/db.js";
 import dotenv from "dotenv";
 import cors from "cors";
 import clienteRoutes from "./routes/ClienteRoutes.js";
+import authRoutes from "./routes/AuthRoutes.js";
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
-// Configurar el middleware de CORS. En este caso está para todos los dominios. 
+// Configurar el middleware de CORS. En este caso está para todos los dominios.
 app.use(
   cors({
     origin: "*",
@@ -27,7 +28,7 @@ db.authenticate()
   .then(() => console.log("Databse connection successful"))
   .catch((error) => console.log("Connection error: ", error));
 
-  /*
+/*
 // Para crear las tablas a partir de los modelos
 db.sync()
   .then(() => console.log("Database synchronized"))
@@ -36,18 +37,17 @@ db.sync()
 
 //configuración del puerto
 app.listen(port, () => {
-    console.log(`API escuchando en http://localhost:${port}`);
-  });
+  console.log(`API escuchando en http://localhost:${port}`);
+});
 
+//endpoint prueba
+app.get("/", (req, res) => {
+  res.send("Hola Mundo desde mi primera API en Node.js!");
+});
 
-  
-  //endpoint prueba
-  app.get('/', (req, res) => {
-    res.send('Hola Mundo desde mi primera API en Node.js!');
-  });
-  
-  //para manejar las peticiones de Clientes
-  app.use("/clientes", clienteRoutes);
+//para manejar las peticiones de Clientes
+app.use("/clientes", clienteRoutes);
+app.use("/auth", authRoutes);
 /*
   //Creación de las tablas 
   async function main(){
@@ -58,6 +58,5 @@ app.listen(port, () => {
       console.log(error.message);
     }
   }*/
-  
 
-  //main();
+//main();
