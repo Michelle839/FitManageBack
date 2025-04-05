@@ -1,9 +1,6 @@
 import cliente from "../models/Cliente.js";
-
-
 import suscripcion from "../models/Suscripcion.js";
 import membresia from "../models/Membresia.js";
-
         
 
     //listar todos los clientes sin repetir
