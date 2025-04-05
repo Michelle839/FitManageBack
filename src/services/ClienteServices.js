@@ -1,12 +1,10 @@
 import cliente from "../models/Cliente.js";
+
+
 import suscripcion from "../models/Suscripcion.js";
 import membresia from "../models/Membresia.js";
 
-        //con export ya se exportan las funciones automaticamente
-        /*
-  export  async function listar() {
-        return await cliente.findAll(); // Obtiene de la bd todos los clientes
-    };*/
+        
 
     //listar todos los clientes sin repetir
     export async function listar() {
@@ -55,7 +53,7 @@ import membresia from "../models/Membresia.js";
         });
       };
       
-      // pa calcular el la diferencia entre la fecha fin y la fecha actual
+      // para calcular el la diferencia entre la fecha fin y la fecha actual
       function calcularDiasRestantes(fechaFin) {  
         const hoy = new Date();
         const fin = new Date(fechaFin);
@@ -64,10 +62,10 @@ import membresia from "../models/Membresia.js";
         return dias > 0 ? dias : 0;
       };
 
-   export async function buscarPorCedula(dni){
-        return await cliente.findByPk(dni);
-    };
+export async function buscarPorCedula(dni) {
+    return await cliente.findByPk(dni);
+};
 
-
-
-
+export async function registrarCliente(datosCliente) {
+    return await cliente.create(datosCliente);
+};
