@@ -16,3 +16,4 @@ router.use((req, res, next) => {
   router.get("/:id", buscarPorCedula);
   
 export default router;
+
