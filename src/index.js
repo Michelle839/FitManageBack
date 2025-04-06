@@ -15,7 +15,7 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
-// Configurar el middleware de CORS. En este caso está para todos los dominios.
+
 app.use(
   cors({
     origin: "*",
@@ -23,40 +23,18 @@ app.use(
 );
 
 const port = 3000;
-// Base de datos.
+
 db.authenticate()
   .then(() => console.log("Databse connection successful"))
   .catch((error) => console.log("Connection error: ", error));
 
-/*
-// Para crear las tablas a partir de los modelos
-db.sync()
-  .then(() => console.log("Database synchronized"))
-  .catch((error) => console.log("Error synchronizing database: ", error));
-*/
-
-//configuración del puerto
 app.listen(port, () => {
   console.log(`API escuchando en http://localhost:${port}`);
 });
 
-//endpoint prueba
 app.get("/", (req, res) => {
   res.send("Hola Mundo desde mi primera API en Node.js!");
 });
 
-//para manejar las peticiones de Clientes
 app.use("/clientes", clienteRoutes);
 app.use("/auth", authRoutes);
-/*
-  //Creación de las tablas 
-  async function main(){
-    try{
-        await db.sync({force: true});
-        console.log("Tablas creadas exitosamente B)")
-    }catch(error){
-      console.log(error.message);
-    }
-  }*/
-
-//main();
