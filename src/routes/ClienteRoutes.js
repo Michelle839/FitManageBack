@@ -19,3 +19,4 @@ router.get("/:id", buscarPorCedula);
 router.post("/", registrar);
 
 export default router;
+
