@@ -20,3 +20,13 @@ export async function authenticateUser(DNI, contraseña) {
 
   throw new Error("Usuario no encontrado");
 }
+
+export async function buscarUsuarioPorCorreo(email) {
+  let usuario = await Administrador.findOne({ where: { email } });
+  if (usuario) return { usuario, role: "Administrador" };
+
+  usuario = await Cliente.findOne({ where: { email } });
+  if (usuario) return { usuario, role: "Cliente" };
+
+  return null;
+}
