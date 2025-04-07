@@ -51,7 +51,7 @@ import membresia from "../models/Membresia.js";
       };
       
       // para calcular el la diferencia entre la fecha fin y la fecha actual
-      function calcularDiasRestantes(fechaFin) {  
+      export function calcularDiasRestantes(fechaFin) {  
         const hoy = new Date();
         const fin = new Date(fechaFin);
         const diferencia = fin - hoy;
@@ -66,3 +66,4 @@ export async function buscarPorCedula(dni) {
 export async function registrarCliente(datosCliente) {
     return await cliente.create(datosCliente);
 };
+
