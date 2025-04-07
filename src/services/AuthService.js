@@ -2,26 +2,21 @@ import Administrador from "../models/Administrador.js";
 import Cliente from "../models/Cliente.js";
 import bcrypt from "bcrypt";
 
-export async function authenticateUser(DNI, contraseña, role) {
-  let usuario = null;
-  console.log("rol resibido:", role); // Depuración
+export async function authenticateUser(DNI, contraseña) {
+  let usuario = await Administrador.findByPk(DNI);
 
-  // Buscar en la tabla correspondiente según el rol
-  if (role === "Administrador") {
-    usuario = await Administrador.findByPk(DNI);
-  } else if (role === "Cliente") {
-    usuario = await Cliente.findByPk(DNI);
-  } else {
-    throw new Error("Rol no válido");
+  if (usuario) {
+    const isValid = bcrypt.compareSync(contraseña, usuario.contraseña);
+    if (!isValid) throw new Error("Contraseña incorrecta");
+    return { usuario, role: "Administrador" };
   }
 
-  if (!usuario) {
-    throw new Error("Usuario no encontrado");
+  usuario = await Cliente.findByPk(DNI);
+  if (usuario) {
+    const isValid = bcrypt.compareSync(contraseña, usuario.contraseña);
+    if (!isValid) throw new Error("Contraseña incorrecta");
+    return { usuario, role: "Cliente" };
   }
 
-  const isValid = bcrypt.compareSync(contraseña, usuario.contraseña);
-  if (!isValid) {
-    throw new Error("Contraseña incorrecta");
-  }
-  return usuario;
+  throw new Error("Usuario no encontrado");
 }

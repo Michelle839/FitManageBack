@@ -2,15 +2,16 @@ import { authenticateUser } from "../services/AuthService.js";
 
 export async function login(req, res) {
   try {
-    const { DNI, contraseña, role } = req.body;
+    const { DNI, contraseña } = req.body;
 
-    if (!DNI || !contraseña || !role) {
+    if (!DNI || !contraseña) {
       return res
         .status(400)
         .json({ message: "Todos los campos son obligatorios" });
     }
 
-    const usuario = await authenticateUser(DNI, contraseña, role);
+    const { usuario, role } = await authenticateUser(DNI, contraseña);
+
     return res.json({
       role,
       message: "Inicio de sesión exitoso",

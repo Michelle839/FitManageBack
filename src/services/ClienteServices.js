@@ -1,7 +1,6 @@
 import cliente from "../models/Cliente.js";
 import suscripcion from "../models/Suscripcion.js";
 import membresia from "../models/Membresia.js";
-        
 
     //listar todos los clientes sin repetir
     export async function listar() {
@@ -66,3 +65,27 @@ export async function buscarPorCedula(dni) {
 export async function registrarCliente(datosCliente) {
     return await cliente.create(datosCliente);
 };
+
+export async function actualizarCliente(dni, nuevosDatos) {
+    const clienteExistente = await cliente.findByPk(dni);
+  
+    if (!clienteExistente) {
+      throw new Error("Cliente no encontrado");
+    }
+  
+    await clienteExistente.update(nuevosDatos);
+  
+    return clienteExistente; 
+  }
+
+
+  export async function actualizarContraseña(dni, contraseñaHasheada) {
+    const clienteExistente = await cliente.findByPk(dni);
+    if (!clienteExistente) {
+      throw new Error("Cliente no encontrado");
+    }
+  
+    clienteExistente.contraseña = contraseñaHasheada;
+    await clienteExistente.save();
+    return clienteExistente;
+  }
