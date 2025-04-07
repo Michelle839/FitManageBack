@@ -22,14 +22,14 @@ app.use(
   })
 );
 
-const port = 3000;
+
 
 db.authenticate()
   .then(() => console.log("Databse connection successful"))
   .catch((error) => console.log("Connection error: ", error));
 
-app.listen(port, () => {
-  console.log(`API escuchando en http://localhost:${port}`);
+app.listen(process.env.PUERTO, () => {
+  console.log(`API escuchando en http://localhost:${process.env.PUERTO}`);
 });
 
 app.get("/", (req, res) => {
