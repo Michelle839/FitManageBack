@@ -5,9 +5,13 @@ import {
 import { enviarCorreo } from "../services/EmailService.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+<<<<<<< HEAD
 import dotenv from "dotenv";
 
 dotenv.config();
+=======
+
+>>>>>>> c724196324ee250aa81fcb2962c1dad9f1442ac1
 
 export async function listar(req, res) {
   try {
@@ -49,7 +53,11 @@ export async function registrar(req, res) {
 
     const nuevoCliente = await registrarCliente({ DNI, nombre, telefono, email, edad, peso, altura });
     const token = jwt.sign({ DNI }, process.env.JWT_SECRET, { expiresIn: "72h" });
+<<<<<<< HEAD
     const link = `${process.env.FRONTEND_URL}/crear-contrasena/${token}`;
+=======
+    const link = `http://localhost:5173/crear-contrasena/${token}`;
+>>>>>>> c724196324ee250aa81fcb2962c1dad9f1442ac1
 
     await enviarCorreo(
       email,
