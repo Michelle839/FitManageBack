@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 import dotenv from "dotenv";
 dotenv.config({
@@ -7,12 +6,6 @@ dotenv.config({
 
 import { Sequelize } from "sequelize";
 
-=======
-import { Sequelize } from "sequelize";
-import dotenv from "dotenv";
-
-dotenv.config();
->>>>>>> c724196324ee250aa81fcb2962c1dad9f1442ac1
 
 const sequelize = new Sequelize(process.env.MYSQL_URL, {
   define: { timestamps: false },
@@ -33,8 +26,4 @@ async function testConnection() {
   }
 }
 
-<<<<<<< HEAD
-=======
-//testConnection(); 
->>>>>>> c724196324ee250aa81fcb2962c1dad9f1442ac1
 export default sequelize;
