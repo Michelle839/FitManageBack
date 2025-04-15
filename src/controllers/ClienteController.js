@@ -5,7 +5,9 @@ import {
 import { enviarCorreo } from "../services/EmailService.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import dotenv from "dotenv";
 
+dotenv.config();
 
 export async function listar(req, res) {
   try {
@@ -47,7 +49,7 @@ export async function registrar(req, res) {
 
     const nuevoCliente = await registrarCliente({ DNI, nombre, telefono, email, edad, peso, altura });
     const token = jwt.sign({ DNI }, process.env.JWT_SECRET, { expiresIn: "72h" });
-    const link = `http://localhost:5173/crear-contrasena/${token}`;
+    const link = `${process.env.FRONTEND_URL}/crear-contrasena/${token}`;
 
     await enviarCorreo(
       email,
