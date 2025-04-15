@@ -10,6 +10,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import clienteRoutes from "./routes/ClienteRoutes.js";
 import authRoutes from "./routes/AuthRoutes.js";
+import membresiaRoutes from "./routes/MembresiaRoutes.js";
 
 dotenv.config();
 
@@ -38,3 +39,4 @@ app.get("/", (req, res) => {
 
 app.use("/clientes", clienteRoutes);
 app.use("/auth", authRoutes);
+app.use("/membresias",membresiaRoutes);
