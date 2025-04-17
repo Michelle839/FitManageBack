@@ -11,8 +11,11 @@ import cors from "cors";
 import clienteRoutes from "./routes/ClienteRoutes.js";
 import authRoutes from "./routes/AuthRoutes.js";
 import membresiaRoutes from "./routes/MembresiaRoutes.js";
+import pagoRoutes from "./routes/PagoRoutes.js";
 
-dotenv.config();
+dotenv.config({
+  path: "./.env"
+});
 
 const app = express();
 app.use(express.json());
@@ -40,3 +43,4 @@ app.get("/", (req, res) => {
 app.use("/clientes", clienteRoutes);
 app.use("/auth", authRoutes);
 app.use("/membresias",membresiaRoutes);
+app.use("/pagos", pagoRoutes);
