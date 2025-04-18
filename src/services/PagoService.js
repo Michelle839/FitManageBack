@@ -2,14 +2,17 @@ import Cliente from "../models/Cliente.js";
 import Membresia from "../models/Membresia.js";
 import Suscripcion from "../models/Suscripcion.js";
 import Pago from "../models/Pago.js";
-
 import {NotFoundError, BadRequestError, InternalServerError} from "../errors/Errores.js";
+import SuscripcionService from "./SuscripcionService.js";
 
     //Registrar un nuevo pago, al hacerlo debo también registrar que el cliente adquirió una nuva suscripción
  async function registrar(cliente_id, membresia_id) {
         //valido los datos
-        if(!cliente_id || !membresia_id){
-            throw new BadRequestError("Cliente o memebresía inválidos");
+        if(!cliente_id ){
+            throw new BadRequestError("Cliente inválido");
+        }
+        if(!membresia_id){
+            throw new BadRequestError("Membresia inválida");
         }
         try {
             const cliente = await Cliente.findByPk(cliente_id);
@@ -25,6 +28,7 @@ import {NotFoundError, BadRequestError, InternalServerError} from "../errors/Err
                 id_cliente: cliente_id,
                 id_membresia: membresia_id
             });
+            SuscripcionService.registrar(cliente_id, membresia_id);
             return pago;
         } catch (error) {
             throw error;

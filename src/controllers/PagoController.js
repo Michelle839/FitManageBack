@@ -1,4 +1,5 @@
 import PagoService from "../services/PagoService.js";
+import SuscripcionService from "../services/SuscripcionService.js";
 
 export async function registrar(req, res){
     try {

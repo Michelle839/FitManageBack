@@ -12,6 +12,7 @@ import clienteRoutes from "./routes/ClienteRoutes.js";
 import authRoutes from "./routes/AuthRoutes.js";
 import membresiaRoutes from "./routes/MembresiaRoutes.js";
 import pagoRoutes from "./routes/PagoRoutes.js";
+import suscripcionRoutes from "./routes/SuscripcionRoutes.js";
 
 dotenv.config({
   path: "./.env"
@@ -44,3 +45,4 @@ app.use("/clientes", clienteRoutes);
 app.use("/auth", authRoutes);
 app.use("/membresias",membresiaRoutes);
 app.use("/pagos", pagoRoutes);
+app.use("/suscripciones", suscripcionRoutes);

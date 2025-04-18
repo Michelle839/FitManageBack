@@ -31,4 +31,15 @@ Suscripcion.belongsTo(Membresia, {
     foreignKey: "id_membresia"
 });
 
+export function calcularEstado(fechaInicio, fechaFin){
+    const fecha1 = new Date(fechaInicio);
+    const fecha2 = new Date(fechaFin);
+    if (isNaN(fecha1.getTime()) || isNaN(fecha2.getTime())) {
+        throw new Error("Fechas inválidas");
+    }
+    const diferenciaMs = fecha2 - fecha1;
+    const diferenciaDias = diferenciaMs / (1000 * 60 * 60 * 24);
+    const estado = diferenciaDias > 0 ? "activo" : "inactivo";
+    return estado;
+}
 export default Suscripcion;
