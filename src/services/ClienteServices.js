@@ -14,9 +14,9 @@ import membresia from "../models/Membresia.js";
                   model: membresia,
                 },
               ],
-              order: [[suscripcion, 'fecha_fin', 'DESC']],
             },
           ],
+          order: [[{ model: suscripcion }, 'fecha_fin', 'DESC']]
         });
       
         return clientes.map((cliente) => {
