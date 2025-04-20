@@ -1,4 +1,4 @@
-import { enviarCorreo } from "../services/EmailServices.js";
+import { enviarCorreo } from "../services/EmailService.js";
 import { generarTokenParaRecuperacion } from "../GenerarToken.js";
 import administrador from "../models/Administrador.js";
 import cliente from "../models/Cliente.js";

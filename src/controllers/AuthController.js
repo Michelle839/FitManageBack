@@ -23,13 +23,7 @@ export async function login(req, res) {
   } catch (error) {
     console.error("Error en el login:", error.message);
 
-    if (error.message === "Usuario no encontrado") {
-      return res.status(404).json({ message: error.message });
-    }
-    if (error.message === "Contraseña incorrecta") {
-      return res.status(401).json({ message: error.message });
-    }
-
-    return res.status(500).json({ message: "Error interno del servidor" });
+    const status = error.statusCode || 500;
+    return res.status(status).json({ message: error.message });
   }
 }

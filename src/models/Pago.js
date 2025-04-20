@@ -4,7 +4,7 @@ import Cliente from "./Cliente.js";
 import Membresia from "./Membresia.js";
 
 const Pago = db.define("pago", {
-    id_pago: {type: DataTypes.INTEGER, primaryKey: true}, 
+    id_pago: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}, 
     fecha_pago: {type: DataTypes.DATEONLY, allowNull: false}
 }, {
     timestamps: false, 
