@@ -20,17 +20,7 @@ import {tieneMembresiaActiva, membresiasDeCliente} from "./ClienteServices.js";
             if(!cliente){
                 throw new NotFoundError("Cliente no encontrado");
             };
-            //Para saber si el cliente ya cuenta con una membresia activa
-            const clienteConMembresias = await membresiasDeCliente(cliente.DNI);
-            const suscripciones = clienteConMembresias?.Cliente_Membresia || clienteConMembresias?.dataValues?.Cliente_Membresia;
-            const ultimaSuscripcion = suscripciones?.[0];
-            console.log(ultimaSuscripcion.fecha_fin);
-            if(ultimaSuscripcion){
-                const tieneMembreActvia = tieneMembresiaActiva(ultimaSuscripcion.fecha_fin);
-                if(tieneMembreActvia){
-                    throw new Conflict("El cliente ya cuenta con una membresia activa");
-                };
-            };
+                  
             const membresia = await Membresia.findByPk(membresia_id);
             if(!membresia){
                 throw new NotFoundError("Membresia no encontrada");
