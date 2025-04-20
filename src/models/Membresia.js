@@ -13,7 +13,8 @@ const Membresia = db.define("membresia", {
 });
 
 export function calcularDuracionEnDias(duracionT){
-    return duracionT.includes("meses") ? parseInt(duracionT)*30 : duracionT;
+    const match = duracionT.match(/\d+/);
+    return duracionT.includes("meses") ? parseInt(match)*30 : duracionT;
 };
 
 export default Membresia;
