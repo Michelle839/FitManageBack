@@ -1,4 +1,6 @@
 import membresia from "../models/Membresia.js";
+import {calcularDuracionEnDias} from "../models/Membresia.js";
+
 import {
   NotFoundError,
   BadRequestError,
@@ -17,6 +19,8 @@ export async function listarMembresias() {
 }
 
 export async function crearMembresia(nuevaMembresia) {
+  const duracion = calcularDuracionEnDias(nuevaMembresia.duracion);
+  nuevaMembresia.duracion = duracion;
   try {
     const nueva = await membresia.create(nuevaMembresia);
     return nueva;
