@@ -67,9 +67,6 @@ export async function registrarCliente(datosCliente) {
     return await cliente.create(datosCliente);
 };
 
-
-
-
 export async function actualizarCliente(dni, nuevosDatos) {
     const clienteExistente = await cliente.findByPk(dni);
   
@@ -82,7 +79,6 @@ export async function actualizarCliente(dni, nuevosDatos) {
     return clienteExistente; 
   }
 
-
   export async function actualizarContraseña(dni, contraseñaHasheada) {
     const clienteExistente = await cliente.findByPk(dni);
     if (!clienteExistente) {
@@ -92,4 +88,16 @@ export async function actualizarCliente(dni, nuevosDatos) {
     clienteExistente.contraseña = contraseñaHasheada;
     await clienteExistente.save();
     return clienteExistente;
+  };
+
+  export function tieneMembresiaActiva(fechaFin){
+    return new Date(fechaFin) > new Date();
+  };
+
+  export async function membresiasDeCliente(dni) {
+    return await cliente.findByPk(dni,{
+      include: {
+        model:suscripcion
+      }
+    });
   }

@@ -2,8 +2,9 @@ import Cliente from "../models/Cliente.js";
 import Membresia from "../models/Membresia.js";
 import Suscripcion from "../models/Suscripcion.js";
 import Pago from "../models/Pago.js";
-import {NotFoundError, BadRequestError, InternalServerError} from "../errors/Errores.js";
+import {NotFoundError, BadRequestError, InternalServerError, Conflict} from "../errors/Errores.js";
 import SuscripcionService from "./SuscripcionService.js";
+import {tieneMembresiaActiva, membresiasDeCliente} from "./ClienteServices.js";
 
     //Registrar un nuevo pago, al hacerlo debo también registrar que el cliente adquirió una nuva suscripción
  async function registrar(cliente_id, membresia_id) {
@@ -18,6 +19,16 @@ import SuscripcionService from "./SuscripcionService.js";
             const cliente = await Cliente.findByPk(cliente_id);
             if(!cliente){
                 throw new NotFoundError("Cliente no encontrado");
+            };
+            //Para saber si el cliente ya cuenta con una membresia activa
+            const clienteConMembresias = await membresiasDeCliente(cliente.DNI);
+            const suscripciones = clienteConMembresias?.Cliente_Membresia || clienteConMembresias?.dataValues?.Cliente_Membresia;
+            const ultimaSuscripcion = suscripciones?.[0];
+            if(ultimaSuscripcion){
+                const tieneMembreActvia = tieneMembresiaActiva(ultimaSuscripcion.fecha_fin);
+                if(tieneMembreActvia){
+                    throw new Conflict("El cliente ya cuenta con una membresia activa");
+                };
             };
             const membresia = await Membresia.findByPk(membresia_id);
             if(!membresia){
