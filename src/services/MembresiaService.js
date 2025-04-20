@@ -7,7 +7,9 @@ import {
 
 export async function listarMembresias() {
   try {
-    const membresias = await membresia.findAll();
+    const membresias = await membresia.findAll({
+      where: { activa: 1 }
+    });
     return membresias;
   } catch (error) {
     throw new Error("Error al obtener las membresías: " + error.message);
@@ -56,5 +58,24 @@ export async function actualizarMembresia(id_membresia, { tipo, precio }) {
     return membresiaActualizar;
   } catch (error) {
     throw new Error("Error al actualizar la membresía: " + error.message);
+  }
+}
+
+
+export async function desactivarMembresia(id_membresia) {
+  try {
+    const memb = await membresia.findByPk(id_membresia);
+    if (!memb) {
+      throw new NotFoundError("Membresía no encontrada");
+    }
+
+    memb.activa = 0;
+    await memb.save();
+    return memb;
+  } catch (error) {
+    if (error instanceof NotFoundError) {
+      throw error;
+    }
+    throw new InternalServerError("Error al desactivar la membresía: " + error.message);
   }
 }

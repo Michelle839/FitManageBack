@@ -3,6 +3,7 @@ import {
   crearMembresia,
   buscarPorId as buscarPId,
   actualizarMembresia,
+  desactivarMembresia
 } from "../services/MembresiaService.js";
 
 export async function listar(req, res) {
@@ -77,3 +78,13 @@ export async function actualizar(req, res) {
 }
 
 // Eliminar una membresía
+export async function desactivarMembresiaPorId(req, res) {
+  const { id } = req.params;
+  try {
+    const desactivada = await desactivarMembresia(id);
+    res.json({ mensaje: "Membresía desactivada correctamente", membresia: desactivada });
+  } catch (error) {
+    const status = error.statusCode || 500;
+    res.status(status).json({ mensaje: error.message });
+  }
+}
