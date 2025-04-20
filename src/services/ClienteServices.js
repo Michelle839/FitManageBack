@@ -91,13 +91,15 @@ export async function actualizarCliente(dni, nuevosDatos) {
   };
 
   export function tieneMembresiaActiva(fechaFin){
-    return new Date(fechaFin) > new Date();
+    return new Date(fechaFin) >= new Date();
   };
 
   export async function membresiasDeCliente(dni) {
     return await cliente.findByPk(dni,{
       include: {
-        model:suscripcion
+        model:suscripcion,
+        separate: true,
+       order: [['fecha_fin', 'DESC']]
       }
     });
   }

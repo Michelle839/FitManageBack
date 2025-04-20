@@ -24,6 +24,7 @@ import {tieneMembresiaActiva, membresiasDeCliente} from "./ClienteServices.js";
             const clienteConMembresias = await membresiasDeCliente(cliente.DNI);
             const suscripciones = clienteConMembresias?.Cliente_Membresia || clienteConMembresias?.dataValues?.Cliente_Membresia;
             const ultimaSuscripcion = suscripciones?.[0];
+            console.log(ultimaSuscripcion.fecha_fin);
             if(ultimaSuscripcion){
                 const tieneMembreActvia = tieneMembresiaActiva(ultimaSuscripcion.fecha_fin);
                 if(tieneMembreActvia){
