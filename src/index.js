@@ -13,6 +13,7 @@ import authRoutes from "./routes/AuthRoutes.js";
 import membresiaRoutes from "./routes/MembresiaRoutes.js";
 import pagoRoutes from "./routes/PagoRoutes.js";
 import suscripcionRoutes from "./routes/SuscripcionRoutes.js";
+import gananciaRoutes from "./routes/GananciaRoutes.js";
 
 dotenv.config({
   path: "./.env"
@@ -27,7 +28,16 @@ app.use(
   })
 );
 
+// async function main() {
+//   try {
+//     await db.sync({ alter: true });
+//     console.log("Tablas creadas exitosamente B)")
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// }
 
+// main()
 
 db.authenticate()
   .then(() => console.log("Databse connection successful"))
@@ -43,6 +53,7 @@ app.get("/", (req, res) => {
 
 app.use("/clientes", clienteRoutes);
 app.use("/auth", authRoutes);
-app.use("/membresias",membresiaRoutes);
+app.use("/membresias", membresiaRoutes);
 app.use("/pagos", pagoRoutes);
 app.use("/suscripciones", suscripcionRoutes);
+app.use("/ganancias", gananciaRoutes);
