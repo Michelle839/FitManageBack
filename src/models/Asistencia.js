@@ -5,9 +5,9 @@ import Administrador from "./Administrador.js";
 
 
 const Asistencia = db.define("asistencia", {
-    id_asistencia: {type: DataTypes.INTEGER, primaryKey: true},
-    fecha: {type: DataTypes.DATE, allowNull: false}, 
-    hora: {type: DataTypes.TIME, allowNull: false}
+    id_asistencia: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    fecha: {type: DataTypes.DATEONLY, allowNull: false},
+    hora: {type: DataTypes.TIME}
 },{
     timestamps: false, 
     freezeTableName: true
