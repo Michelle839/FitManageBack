@@ -1,5 +1,6 @@
 import { Op, fn, col, literal } from "sequelize";
 import Membresia from "../models/Membresia.js";
+import Suscripcion from "../models/Suscripcion.js";
 import Pago from "../models/Pago.js";
 import Cliente from "../models/Cliente.js";
 
@@ -76,12 +77,15 @@ export async function obtenerGananciasPorMeses(anio) {
 
 
 export async function obtenerGananciasPorRangoFechas(fechaInicio, fechaFin) {
-    fechaFin.setDate(fechaFin.getDate() + 1);
+    const fechaInicioStr = typeof fechaInicio === 'string' ? fechaInicio : fechaInicio.toISOString().slice(0, 10);
+    const fechaFinStr = typeof fechaFin === 'string' ? fechaFin : fechaFin.toISOString().slice(0, 10);
+
     const pagos = await Pago.findAll({
         where: {
-            fecha_pago: {
-                [Op.between]: [fechaInicio, fechaFin]
-            }
+            [Op.and]: [
+                literal(`DATE(fecha_pago) >= '${fechaInicioStr}'`),
+                literal(`DATE(fecha_pago) <= '${fechaFinStr}'`)
+            ]
         },
         attributes: [
             [fn('DATE', col('fecha_pago')), 'fecha']
@@ -91,7 +95,7 @@ export async function obtenerGananciasPorRangoFechas(fechaInicio, fechaFin) {
             attributes: ['precio'],
             required: true
         },
-        order: [[literal('DATE(fecha_pago)'), 'ASC']],
+        order: [['fecha_pago', 'ASC']],
         raw: true
     });
 
@@ -115,13 +119,15 @@ export async function obtenerGananciasPorRangoFechas(fechaInicio, fechaFin) {
 
 
 export async function obtenerDetalleGananciasPorRangoFechas(fechaInicio, fechaFin) {
-    fechaFin.setDate(fechaFin.getDate() + 1); // incluir fecha fin completa
+    const fechaInicioStr = typeof fechaInicio === 'string' ? fechaInicio : fechaInicio.toISOString().slice(0, 10);
+    const fechaFinStr = typeof fechaFin === 'string' ? fechaFin : fechaFin.toISOString().slice(0, 10);
 
     const resultados = await Pago.findAll({
         where: {
-            fecha_pago: {
-                [Op.between]: [fechaInicio, fechaFin]
-            }
+            [Op.and]: [
+                literal(`DATE(fecha_pago) >= '${fechaInicioStr}'`),
+                literal(`DATE(fecha_pago) <= '${fechaFinStr}'`)
+            ]
         },
         include: [
             {
@@ -140,20 +146,81 @@ export async function obtenerDetalleGananciasPorRangoFechas(fechaInicio, fechaFi
         raw: true
     });
 
-    // Procesamos los datos para el frontend
+
     const datosProcesados = resultados.map(r => ({
         cliente: r["cliente.nombre"],
         tipoMembresia: r["membresium.tipo"],
-        fecha: new Date(r.fecha_pago).toISOString().split('T')[0],
+        fecha: r.fecha_pago,
         precio: r["membresium.precio"]
     }));
 
-    // Calculamos el total
-    const total = datosProcesados.reduce((suma, r) => suma + Number(r.precio), 0).toFixed(2);
 
+    const total = datosProcesados.reduce((suma, r) => suma + Number(r.precio), 0).toFixed(2);
 
     return {
         total,
         resultados: datosProcesados
     };
+}
+
+
+export async function obtenerMembresiasMasVendidasPorAnio(anio) {
+    const inicio = new Date(anio, 0, 1);
+    const fin = new Date(anio, 11, 31, 23, 59, 59);
+
+    return Suscripcion.findAll({
+        where: {
+            fecha_inicio: {
+                [Op.between]: [inicio, fin],
+            },
+        },
+        include: [Membresia],
+        attributes: [
+            [col('Cliente_Membresia.id_membresia'), 'id_membresia'],
+            [fn('COUNT', col('Cliente_Membresia.id_membresia')), 'cantidadVendida']
+        ],
+        group: ['Cliente_Membresia.id_membresia', 'membresium.id_membresia'],
+        order: [[fn('COUNT', col('Cliente_Membresia.id_membresia')), 'DESC']]
+    });
+}
+
+
+export async function obtenerMembresiasMasVendidasPorMes(anio, mes) {
+    const inicio = new Date(anio, mes - 1, 1);
+    const fin = new Date(anio, mes, 0);
+
+    return Suscripcion.findAll({
+        where: {
+            fecha_inicio: {
+                [Op.between]: [inicio, fin],
+            },
+        },
+        include: [Membresia],
+        attributes: [
+            'id_membresia',
+            [fn('COUNT', col('Cliente_Membresia.id_membresia')), 'cantidadVendida']
+        ],
+        group: ['Cliente_Membresia.id_membresia', 'membresium.id_membresia'],
+        order: [[fn('COUNT', col('Cliente_Membresia.id_membresia')), 'DESC']]
+
+    });
+}
+
+// MÁS VENDIDAS POR RANGO DE FECHAS
+export async function obtenerMembresiasMasVendidasPorRango(inicio, fin) {
+    fin.setDate(fin.getDate() + 1); // Aumentar un día para incluir la fecha final
+    return Suscripcion.findAll({
+        where: {
+            fecha_inicio: {
+                [Op.between]: [inicio, fin],
+            },
+        },
+        include: [Membresia],
+        attributes: [
+            'id_membresia',
+            [fn('COUNT', col('Cliente_Membresia.id_membresia')), 'cantidadVendida']
+        ],
+        group: ['Cliente_Membresia.id_membresia', 'membresium.id_membresia'],
+        order: [[fn('COUNT', col('Cliente_Membresia.id_membresia')), 'DESC']]
+    });
 }
