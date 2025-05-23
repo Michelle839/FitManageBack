@@ -1,7 +1,13 @@
 import cliente from "../models/Cliente.js";
 import suscripcion from "../models/Suscripcion.js";
 import membresia from "../models/Membresia.js";
-        
+  import {
+  NotFoundError,
+  BadRequestError,
+  InternalServerError,
+  Conflict,
+} from "../errors/Errores.js";      
+import Cliente from "../models/Cliente.js";
 
     //listar todos los clientes sin repetir
     export async function listar() {
@@ -103,3 +109,42 @@ export async function actualizarCliente(dni, nuevosDatos) {
       }
     });
   }
+
+export async function buscarClienteDias(dni){
+  try {
+    if(!dni){
+      throw new BadRequestError("Documento vacio");
+    }
+    const cliente = await Cliente.findByPk(dni, {
+       include: [
+            {
+              model: suscripcion,
+              include: [
+                {
+                  model: membresia,
+                },
+              ],
+            },
+          ],
+          order: [[{ model: suscripcion }, 'fecha_fin', 'DESC']]
+    })
+
+    const suscripciones = cliente.Cliente_Membresia;
+    const ultimaSuscripcion = suscripciones?.[0];
+      
+          let diasRestantes = 0;
+      
+          if (ultimaSuscripcion) {
+            diasRestantes = calcularDiasRestantes(ultimaSuscripcion.fecha_fin);
+          }
+          return {
+            DNI: cliente.DNI,
+            nombre: cliente.nombre,
+            email: cliente.email,
+            telefono: cliente.telefono,
+            dias: diasRestantes
+          } 
+  } catch (error) {
+    throw error;
+  }
+}

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { listar, buscarPorCedula, registrar, actualizarCliente, crearContraseña } from "../controllers/ClienteController.js";
+import { listar, buscarPorCedula, registrar, actualizarCliente, crearContraseña, clienteConDias} from "../controllers/ClienteController.js";
 
 
 const router = Router();
@@ -21,5 +21,8 @@ router.put("/:id", actualizarCliente)
 
 //Registrar contraseña
 router.post("/crear-contrasena/:token", crearContraseña);
+
+//cliente con los dias restantes
+router.get("/diasRestantes/:DNI", clienteConDias);
 
 export default router;

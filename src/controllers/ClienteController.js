@@ -1,6 +1,6 @@
 import {
   listar as listarClientes, buscarPorCedula as buscarPCedula,
-  registrarCliente as registrarCliente, actualizarCliente as actualizarClienteS, actualizarContraseña as actualizarContraseñaCliente
+  registrarCliente as registrarCliente, actualizarCliente as actualizarClienteS, actualizarContraseña as actualizarContraseñaCliente, buscarClienteDias
 } from "../services/ClienteServices.js";
 import { enviarCorreo } from "../services/EmailService.js";
 import jwt from "jsonwebtoken";
@@ -122,5 +122,17 @@ export async function crearContraseña(req, res) {
   } catch (error) {
     console.error("Error al crear contraseña:", error.message);
     res.status(400).json({ message: error.message });
+  }
+}
+
+export async function clienteConDias(req, res) {
+  try {
+    console.log("DNI recibido en body:", req.params.DNI);
+    const cliente = await buscarClienteDias(req.params.DNI);
+    res.status(200).json(cliente);
+  } catch (error) {
+    res.status(error.statusCode || 500).json({
+            message: error.message || "Error interno del servidor",
+          });
   }
 }

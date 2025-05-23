@@ -22,19 +22,18 @@ async function registrarAsistencia(dni) {
         //valido si aún no se ha registrado asistencia 
         const yaRegistro = await verSiYaRegistroAsistencia(dni, hoy);
         //si aún le quedan días  creo la asistencia
-        let asistencia = null;
         if(yaRegistro){
             throw new Conflict("Ya registró asistencia hoy.");
         }
-        if( hoy <= fin){
-            //creo la asistencia
-             asistencia= await Asistencia.create({
+        if( hoy > fin){
+            throw new Conflict("No cuenta con membresía activa");   
+        }
+        const asistencia= await Asistencia.create({
                 fecha: hoy,
                 id_cliente: dni
             })
-            if(!asistencia){
-                throw new InternalServerError("No se pudo crear la asistencia")
-            }
+        if(!asistencia){
+            throw new InternalServerError("No se pudo crear la asistencia")
         }
         return asistencia;
     } catch (error) {
