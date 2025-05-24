@@ -15,6 +15,7 @@ import authRoutes from "./routes/AuthRoutes.js";
 import membresiaRoutes from "./routes/MembresiaRoutes.js";
 import pagoRoutes from "./routes/PagoRoutes.js";
 import suscripcionRoutes from "./routes/SuscripcionRoutes.js";
+import gananciaRoutes from "./routes/GananciaRoutes.js";
 import asistenciaRoutes from "./routes/AsistenciaRoutes.js";
 import { format } from 'date-fns';
 
@@ -30,6 +31,7 @@ app.use(
     origin: "*",
   })
 );
+
 
 
 db.authenticate()
@@ -66,9 +68,10 @@ app.get("/", (req, res) => {
 
 app.use("/clientes", clienteRoutes);
 app.use("/auth", authRoutes);
-app.use("/membresias",membresiaRoutes);
+app.use("/membresias", membresiaRoutes);
 app.use("/pagos", pagoRoutes);
 app.use("/suscripciones", suscripcionRoutes);
+app.use("/ganancias", gananciaRoutes);
 app.use("/asistencia", asistenciaRoutes);
 /*
 import AsistenciaService from "./services/AsistenciaService.js";

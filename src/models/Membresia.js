@@ -12,9 +12,9 @@ const Membresia = db.define("membresia", {
     freezeTableName: true
 });
 
-export function calcularDuracionEnDias(duracionT){
+export function calcularDuracionEnDias(duracionT) {
     const match = duracionT.match(/\d+/);
-    return duracionT.includes("meses") ? parseInt(match)*30 : duracionT;
+    return duracionT.includes("meses") ? parseInt(match) * 30 : duracionT;
 };
 
 export default Membresia;
