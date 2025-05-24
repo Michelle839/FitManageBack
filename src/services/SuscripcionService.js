@@ -2,6 +2,7 @@ import Suscripcion from "../models/Suscripcion.js";
 import { calcularEstado } from "../models/Suscripcion.js";
 import Cliente from "../models/Cliente.js";
 import Membresia from "../models/Membresia.js";
+import { Op } from "sequelize";
 
 import {
   NotFoundError,
@@ -77,8 +78,28 @@ async function verificarMembresiaExpirada(id_cliente) {
   }
 }
 
+async function obtenerClientesActivos() {
+  const hoy = new Date();
+
+  // Obtener todos los clientes que tengan una suscripción con fecha_fin >= hoy
+  const clientesActivos = await Cliente.findAll({
+    include: [
+      {
+        model: Suscripcion,
+        where: {
+          fecha_fin: { [Op.gte]: hoy }, // suscripción vigente
+        },
+        required: true,
+      },
+    ],
+  });
+
+  return clientesActivos;
+}
+
 export default {
   registrar,
   obtenerUltimaSuscripcion,
   verificarMembresiaExpirada,
+  obtenerClientesActivos,
 };

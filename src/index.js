@@ -17,6 +17,7 @@ import pagoRoutes from "./routes/PagoRoutes.js";
 import suscripcionRoutes from "./routes/SuscripcionRoutes.js";
 import gananciaRoutes from "./routes/GananciaRoutes.js";
 import asistenciaRoutes from "./routes/AsistenciaRoutes.js";
+import reporteRoutes from "./routes/ReporteRoutes.js"
 
 dotenv.config({
   path: "./.env",
@@ -71,3 +72,4 @@ app.use("/pagos", pagoRoutes);
 app.use("/suscripciones", suscripcionRoutes);
 app.use("/ganancias", gananciaRoutes);
 app.use("/asistencia", asistenciaRoutes);
+app.use("/api", reporteRoutes);

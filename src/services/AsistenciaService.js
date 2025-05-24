@@ -1,4 +1,5 @@
 import SuscripcionService from "./SuscripcionService.js";
+import { Op } from "sequelize";
 import {
   NotFoundError,
   BadRequestError,
@@ -66,8 +67,23 @@ async function obtenerAsistenciasPorCliente(dni) {
   return asistencias.map((a) => a.fecha);
 }
 
+async function obtenerAsistenciasPorClienteEnRango(dni, fechaInicio, fechaFin) {
+  const asistencias = await Asistencia.findAll({
+    where: {
+      id_cliente: dni,
+      fecha: {
+        [Op.between]: [fechaInicio, fechaFin],
+      },
+    },
+    attributes: ["fecha"],
+    order: [["fecha", "ASC"]],
+  });
+  return asistencias.map((a) => a.fecha);
+}
+
 export default {
   registrarAsistencia,
   verSiYaRegistroAsistencia,
   obtenerAsistenciasPorCliente,
+  obtenerAsistenciasPorClienteEnRango,
 };
