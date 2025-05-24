@@ -1,5 +1,5 @@
 import express from "express";
-import os from 'os';
+import os from "os";
 const port = process.env.PUERTO || 3000;
 import Cliente from "./models/Cliente.js";
 import Administrador from "./models/Administrador.js";
@@ -17,10 +17,9 @@ import pagoRoutes from "./routes/PagoRoutes.js";
 import suscripcionRoutes from "./routes/SuscripcionRoutes.js";
 import gananciaRoutes from "./routes/GananciaRoutes.js";
 import asistenciaRoutes from "./routes/AsistenciaRoutes.js";
-import { format } from 'date-fns';
 
 dotenv.config({
-  path: "./.env"
+  path: "./.env",
 });
 
 const app = express();
@@ -32,8 +31,6 @@ app.use(
   })
 );
 
-
-
 db.authenticate()
   .then(() => console.log("Databse connection successful"))
   .catch((error) => console.log("Connection error: ", error));
@@ -44,22 +41,23 @@ db.authenticate()
   .catch((error) => console.log("Error synchronizing database: ", error));
 */
 
-
 const interfaces = os.networkInterfaces();
-let localIP = 'localhost'; // fallback
+let localIP = "localhost"; // fallback
 
 for (let name in interfaces) {
   for (let iface of interfaces[name]) {
-    if (iface.family === 'IPv4' && !iface.internal && iface.address.startsWith('192.168')) {
+    if (
+      iface.family === "IPv4" &&
+      !iface.internal &&
+      iface.address.startsWith("192.168")
+    ) {
       localIP = iface.address;
     }
   }
 }
 
-app.listen(port, '0.0.0.0', () => {
-  console.log(`API escuchando en:`);
-  console.log(`Localhost: http://localhost:${port}`);
-  console.log(`Red local: http://${localIP}:${port}`);
+app.listen(process.env.PUERTO, () => {
+  console.log(`API escuchando en http://localhost:${process.env.PUERTO}`);
 });
 
 app.get("/", (req, res) => {
@@ -73,9 +71,3 @@ app.use("/pagos", pagoRoutes);
 app.use("/suscripciones", suscripcionRoutes);
 app.use("/ganancias", gananciaRoutes);
 app.use("/asistencia", asistenciaRoutes);
-/*
-import AsistenciaService from "./services/AsistenciaService.js";
-const hoy = new Date();
-format(hoy, 'dd/MM/yyyy');
-
-console.log(await AsistenciaService.verSiYaRegistroAsistencia("1093293084", hoy));*/
