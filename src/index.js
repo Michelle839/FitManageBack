@@ -18,7 +18,7 @@ import suscripcionRoutes from "./routes/SuscripcionRoutes.js";
 import gananciaRoutes from "./routes/GananciaRoutes.js";
 import asistenciaRoutes from "./routes/AsistenciaRoutes.js";
 import reporteRoutes from "./routes/ReporteRoutes.js"
-
+import rutinaRoutes from "./routes/RutinaRoutes.js";
 dotenv.config({
   path: "./.env",
 });
@@ -73,3 +73,4 @@ app.use("/suscripciones", suscripcionRoutes);
 app.use("/ganancias", gananciaRoutes);
 app.use("/asistencia", asistenciaRoutes);
 app.use("/api", reporteRoutes);
+app.use("/rutina", rutinaRoutes);

@@ -1,6 +1,6 @@
 import {
   listar as listarClientes, buscarPorCedula as buscarPCedula,
-  registrarCliente as registrarCliente, actualizarCliente as actualizarClienteS, actualizarContraseña as actualizarContraseñaCliente, buscarClienteDias
+  registrarCliente as registrarCliente, actualizarCliente as actualizarClienteS, actualizarContraseña as actualizarContraseñaCliente, buscarClienteDias, fechaFinSuscripcion
 } from "../services/ClienteServices.js";
 import { enviarCorreo } from "../services/EmailService.js";
 import jwt from "jsonwebtoken";
@@ -130,6 +130,17 @@ export async function clienteConDias(req, res) {
     console.log("DNI recibido en body:", req.params.DNI);
     const cliente = await buscarClienteDias(req.params.DNI);
     res.status(200).json(cliente);
+  } catch (error) {
+    res.status(error.statusCode || 500).json({
+            message: error.message || "Error interno del servidor",
+          });
+  }
+}
+
+export async function obtenerFechaFinSuscripcion(req, res) {
+  try {
+    const fecha = await fechaFinSuscripcion(req.params.DNI);
+    res.status(200).json(fecha);
   } catch (error) {
     res.status(error.statusCode || 500).json({
             message: error.message || "Error interno del servidor",
