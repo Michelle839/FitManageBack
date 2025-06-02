@@ -8,7 +8,7 @@ import {
 } from "../errors/Errores.js";
 import Asistencia from "../models/Asistencia.js";
 import { startOfWeek, addDays, format } from "date-fns";
-import { format, differenceInCalendarDays } from "date-fns";
+import {  differenceInCalendarDays } from "date-fns";
 import NotificacionService from "./NotificacionService.js";
 import NotificacionUsuarioService from "./NotificacionUsuarioService.js";
 import Membresia from "../models/Membresia.js";

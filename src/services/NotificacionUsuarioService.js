@@ -52,4 +52,21 @@ async function obetnerNotificacionesCliente(dni) {
         throw error;
     }
 }
-export default {crearNotiUsuario, obetnerNotificacionesCliente};
+
+async function cambiarEstado(id) {
+    if(!id){
+        throw new BadRequestError("el id es vacío");
+    }
+    try {
+        const nofiUsuario = await ClienteNotificacion.findByPk(id);
+        if(!nofiUsuario){
+            throw new NotFoundError("No se encontró la notificacion del usuario");
+        }
+        nofiUsuario.estado = true;
+        await nofiUsuario.save({field:['estado'] });
+        return nofiUsuario;
+    } catch (error) {
+        throw error;
+    }
+}
+export default {crearNotiUsuario, obetnerNotificacionesCliente, cambiarEstado};
