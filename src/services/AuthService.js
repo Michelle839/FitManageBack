@@ -41,3 +41,27 @@ export async function buscarUsuarioPorCorreo(email) {
 
   return null;
 }
+
+export async function actualizarAvatar(DNI, nuevoAvatar) {
+  let usuario = await Administrador.findByPk(DNI);
+  if (usuario) {
+    usuario.avatar = nuevoAvatar;
+    await usuario.save();
+    return {
+      message: "Avatar actualizado correctamente",
+      avatar: usuario.avatar,
+    };
+  }
+
+  usuario = await Cliente.findByPk(DNI);
+  if (usuario) {
+    usuario.avatar = nuevoAvatar;
+    await usuario.save();
+    return {
+      message: "Avatar actualizado correctamente",
+      avatar: usuario.avatar,
+    };
+  }
+
+  throw new NotFoundError("Usuario no encontrado");
+}
