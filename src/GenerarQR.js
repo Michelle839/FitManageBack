@@ -1,10 +1,10 @@
 import * as QRCode from "qrcode";
 
 // URL local de registrar asistencia al que apunta el QR 
-const url = 'http://192.168.20.10:5173/cliente/registrar-asistencia';
+const url = 'https://fitmanage.netlify.app/cliente/registrar-asistencia';
 
 // Generar el QR y guardarlo como imagen PNG
-QRCode.toFile('qr-asistencia.png', url, {
+QRCode.toFile('qr-asistencias.png', url, {
   color: {
     dark: '#000',  // color del QR
     light: '#FFF'  // fondo blanco

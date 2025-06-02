@@ -18,6 +18,10 @@ import suscripcionRoutes from "./routes/SuscripcionRoutes.js";
 import gananciaRoutes from "./routes/GananciaRoutes.js";
 import asistenciaRoutes from "./routes/AsistenciaRoutes.js";
 import reporteRoutes from "./routes/ReporteRoutes.js"
+import TipoNotificacion from "./models/TipoNotificacion.js";
+import Notificacion from "./models/Notificacion.js";
+import ClienteNotificacion from "./models/ClienteNotificacion.js";
+import NotificacionRoutes from "./routes/NotificacionRoutes.js";
 
 dotenv.config({
   path: "./.env",
@@ -42,6 +46,7 @@ db.authenticate()
   .catch((error) => console.log("Error synchronizing database: ", error));
 */
 
+
 const interfaces = os.networkInterfaces();
 let localIP = "localhost"; // fallback
 
@@ -57,9 +62,17 @@ for (let name in interfaces) {
   }
 }
 
+/*
+app.listen(port, '0.0.0.0', () => {
+  console.log(`API escuchando en:`);
+  console.log(`Localhost: http://localhost:${port}`);
+  console.log(`Red local: http://${localIP}:${port}`);
+  });*/
+
 app.listen(process.env.PUERTO, () => {
   console.log(`API escuchando en http://localhost:${process.env.PUERTO}`);
 });
+
 
 app.get("/", (req, res) => {
   res.send("Hola Mundo desde mi primera API en Node.js!");
@@ -73,3 +86,6 @@ app.use("/suscripciones", suscripcionRoutes);
 app.use("/ganancias", gananciaRoutes);
 app.use("/asistencia", asistenciaRoutes);
 app.use("/api", reporteRoutes);
+app.use("/notificaciones", NotificacionRoutes);
+//import NotificacionService from "./services/NotificacionService.js";
+//await NotificacionService.crearNotificacion("Bailoterapia", "Bailoterapia con Kalimeño", 1);

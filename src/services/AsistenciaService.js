@@ -7,7 +7,10 @@ import {
   Conflict,
 } from "../errors/Errores.js";
 import Asistencia from "../models/Asistencia.js";
-import { format } from "date-fns";
+import { format, differenceInCalendarDays } from "date-fns";
+import NotificacionService from "./NotificacionService.js";
+import NotificacionUsuarioService from "./NotificacionUsuarioService.js";
+import Membresia from "../models/Membresia.js";
 
 async function registrarAsistencia(dni) {
   try {
@@ -38,6 +41,17 @@ async function registrarAsistencia(dni) {
     if (!asistencia) {
       throw new InternalServerError("No se pudo crear la asistencia");
     }
+
+    //que se registró la asistencia con éxito 
+      const notificacion = await NotificacionService.crearNotificacionGeneral("Registrada", 
+        `Asisencia registrada con éxito`, 3);
+      if(!notificacion){
+          throw new InternalServerError("no se pudo crear la notificacion");
+        }
+      const notifiUsuario = await NotificacionUsuarioService.crearNotiUsuario(notificacion.id_notificacion, dni);
+      if(!notifiUsuario){
+          throw new InternalServerError("No se creo la notificacion para el usuario")
+      };
     return asistencia;
   } catch (error) {
     throw error;
