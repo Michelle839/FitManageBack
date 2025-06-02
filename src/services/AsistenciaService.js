@@ -7,6 +7,7 @@ import {
   Conflict,
 } from "../errors/Errores.js";
 import Asistencia from "../models/Asistencia.js";
+import { startOfWeek, addDays, format } from "date-fns";
 import { format, differenceInCalendarDays } from "date-fns";
 import NotificacionService from "./NotificacionService.js";
 import NotificacionUsuarioService from "./NotificacionUsuarioService.js";
@@ -95,9 +96,49 @@ async function obtenerAsistenciasPorClienteEnRango(dni, fechaInicio, fechaFin) {
   return asistencias.map((a) => a.fecha);
 }
 
+async function obtenerAsistenciasUltimaSemana(dni) {
+  const hoy = new Date();
+  const lunes = startOfWeek(hoy, { weekStartsOn: 1 });
+  const sabado = addDays(lunes, 5);
+
+  const fechaInicio = format(lunes, "yyyy-MM-dd");
+  const fechaFin = format(sabado, "yyyy-MM-dd");
+
+  const asistencias = await Asistencia.findAll({
+    where: {
+      id_cliente: dni,
+      fecha: {
+        [Op.between]: [fechaInicio, fechaFin],
+      },
+    },
+    attributes: ["fecha"],
+  });
+
+  // Crear un mapa de fechas asistidas
+ const fechasAsistidas = new Set(asistencias.map(a => new Date(a.fecha).toISOString().slice(0, 10)));
+
+  // Generar la lista de días de lunes a sábado
+  const resultado = [];
+  for (let i = 0; i < 6; i++) {
+    const fecha = addDays(lunes, i);
+     const fechaStr = fecha.toISOString().slice(0, 10);
+    const diaSemana = format(fecha, "EEEE", { locale: undefined }); // Puedes usar 'es' si tienes date-fns/locale/es
+    resultado.push({
+      fecha: fechaStr,
+      dia: diaSemana,
+      asistio: fechasAsistidas.has(fechaStr),
+    });
+  }
+
+  return resultado;
+}
+
 export default {
   registrarAsistencia,
   verSiYaRegistroAsistencia,
   obtenerAsistenciasPorCliente,
   obtenerAsistenciasPorClienteEnRango,
+  obtenerAsistenciasUltimaSemana,
 };
+
+

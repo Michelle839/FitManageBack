@@ -18,6 +18,7 @@ import suscripcionRoutes from "./routes/SuscripcionRoutes.js";
 import gananciaRoutes from "./routes/GananciaRoutes.js";
 import asistenciaRoutes from "./routes/AsistenciaRoutes.js";
 import reporteRoutes from "./routes/ReporteRoutes.js"
+import rutinaRoutes from "./routes/RutinaRoutes.js";
 import TipoNotificacion from "./models/TipoNotificacion.js";
 import Notificacion from "./models/Notificacion.js";
 import ClienteNotificacion from "./models/ClienteNotificacion.js";
@@ -86,6 +87,8 @@ app.use("/suscripciones", suscripcionRoutes);
 app.use("/ganancias", gananciaRoutes);
 app.use("/asistencia", asistenciaRoutes);
 app.use("/api", reporteRoutes);
+app.use("/rutina", rutinaRoutes);
+
 app.use("/notificaciones", NotificacionRoutes);
 //import NotificacionService from "./services/NotificacionService.js";
 //await NotificacionService.crearNotificacion("Bailoterapia", "Bailoterapia con Kalimeño", 1);

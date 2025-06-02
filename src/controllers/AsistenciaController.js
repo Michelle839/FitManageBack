@@ -25,7 +25,19 @@ export async function listarAsistenciasPorCliente(req, res) {
   }
 }
 
+
+export async function obtenerAsistenciaSemanal(req, res) {
+  try {
+    const { dni } = req.params;
+    const resultado = await AsistenciaService.obtenerAsistenciasUltimaSemana(dni);
+    res.json(resultado);
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener asistencias" });
+  }
+}
+
 export default {
   registrarAsistencia,
   listarAsistenciasPorCliente,
+  obtenerAsistenciaSemanal
 };

@@ -148,3 +148,31 @@ export async function buscarClienteDias(dni){
     throw error;
   }
 }
+
+export async function fechaFinSuscripcion(dni) {
+  const clienteEncontrado = await cliente.findByPk(dni, {
+    include: [
+      {
+        model: suscripcion,
+        include: [
+          {
+            model: membresia,
+          },
+        ],
+        order: [['fecha_fin', 'DESC']],
+      },
+    ],
+  });
+
+  if (!clienteEncontrado) {
+    throw new NotFoundError("Cliente no encontrado");
+  }
+
+  const suscripciones = clienteEncontrado.Cliente_Membresia;
+  const ultimaSuscripcion = suscripciones?.[0];
+
+  return {
+    DNI: clienteEncontrado.DNI,
+    fecha_fin: ultimaSuscripcion ? ultimaSuscripcion.fecha_fin : null,
+  };
+}
