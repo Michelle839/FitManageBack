@@ -62,7 +62,7 @@ async function cambiarEstado(id) {
         if(!nofiUsuario){
             throw new NotFoundError("No se encontró la notificacion del usuario");
         }
-        nofiUsuario.estado = true;
+        nofiUsuario.estado = !nofiUsuario.estado;
         await nofiUsuario.save({field:['estado'] });
         return nofiUsuario;
     } catch (error) {
