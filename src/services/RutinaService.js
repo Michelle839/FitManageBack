@@ -48,7 +48,7 @@ Proporciona una respuesta profesional, específica y basada en tu experiencia en
     const response = await axios.post(
         'https://openrouter.ai/api/v1/chat/completions',
         {
-            model: 'meta-llama/llama-4-scout', // Cambio del modelo
+            model: 'deepseek/deepseek-r1-0528:free',
             messages: [
                 { role: 'system', content: 'Entrenador personal experto en fitness y nutrición.' },
                 { role: 'user', content: prompt }
