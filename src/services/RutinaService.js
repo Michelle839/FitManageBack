@@ -1,42 +1,56 @@
 import axios from 'axios';
 
 async function generarRutinaConIA({ message, altura, peso, objetivo, nombre }) {
-    const prompt = `
-Eres un entrenador personal experto en fitness y nutrición, parte del equipo de FitManage.
+    const palabrasRutina = ['rutina', 'ejercicio', 'entrenamiento', 'workout', 'entrenar',
+        'pecho', 'espalda', 'triceps', 'biceps', 'pierna', 'isquios', 'brazo', 'abdomen', 'hombro', 'cuadriceps',
+        'tren superior', 'tren inferior', 'cardio', 'gimnasio'];
 
-Tu tarea es responder de forma útil, profesional y empática al requerimiento del usuario con nombre ${nombre}, este es su requerimiento:
-"${message}"
+    const contieneRutina = palabrasRutina.some(palabra =>
+        message.toLowerCase().includes(palabra.toLowerCase())
+    );
 
-Instrucciones importantes:
+    const saludos = ['hola', 'buenas', 'hey', 'hi', 'buenos días', 'buenas tardes', 'buenas noches'];
+    const esSoloSaludo = saludos.some(saludo =>
+        message.toLowerCase().includes(saludo)
+    ) && !contieneRutina && message.length < 20;
 
-- Si el mensaje del usuario es un saludo (por ejemplo: "hola", "buenas", "hey"), responde de forma breve, cordial, amigable y natural, sin sugerencias excesivas. Ejemplo: "Hola ${nombre}, ¿en qué puedo ayudarte hoy?"
-- Si el mensaje incluye una solicitud de rutina de entrenamiento o consulta sobre ejercicios, genera una rutina personalizada considerando que es en un ambiente de gimnasio:
-  - Altura: ${altura} cm
-  - Peso: ${peso} kg
-  - Objetivo: ${objetivo}
-   Estructura la rutina de forma clara, así:
-   - Título: “Rutina para [Objetivo] – [Región o tipo solicitado]”
-   - Calentamiento: indica 2–3 ejercicios básicos
-   - Ejercicios : 
-          - Nombre(Título)
-          - Descripción breve del ejercicio(maximo 20 palabras)
-          - Músculo trabajado 
-          - Series: Repeticiones, recuerda la importancia de factores como la progresión y la técnica.
-   - Recomendaciones generales: peso, descanso, hidratación
-   - Evita asteriscos o símbolos innecesarios. Usa un lenguaje claro y profesional. Mantén la respuesta visualmente ordenada con títulos y subtítulos.
+    let prompt = '';
 
-- Si el mensaje no trata sobre entrenamiento, responde con información útil y coherente relacionada con la consulta.
-- Escribe siempre en español, en un tono profesional, cercano y sin usar símbolos como **asteriscos**.
+    if (esSoloSaludo) {
+        prompt = `Como entrenador personal de FitManage, saluda brevemente a ${nombre}. Puedes usar emojis, pero no muchos`;
+    } else if (contieneRutina) {
+        prompt = `No saludes ni al inicio ni al final.Como entrenador personal experto de FitManage, diseña una rutina personalizada para ${nombre}, Puedes emojis, pero no te excedas.
 
-Tu tono debe ser profesional pero cercano, y siempre en español.
-`;
+Datos importantes:
+Altura: ${altura}cm | Peso: ${peso}kg | Objetivo: ${objetivo}
+
+Su consulta es: "${message}"
+
+La rutina debe incluir:
+• Breve introducción personalizada (No coloques este título en la respuesta)
+• Ejercicios de calentamiento
+• Rutina principal con ejercicios detallados (series, repeticiones, técnica)
+• Recomendaciones de descanso e hidratación
+
+Importante:
+• Mantén un tono profesional y motivador
+• Sé específico pero conciso
+• Evita formatos complejos o símbolos especiales
+• Responde en español`;
+    } else {
+        prompt = `No saludes ni al inicio ni al final.Como entrenador personal de FitManage, responde a  ${message} 
+        Datos: (${altura}cm, ${peso}kg) quien busca ${objetivo}.
+• Usa emojis relevantes, pero no demasiados.
+
+Proporciona una respuesta profesional, específica y basada en tu experiencia en fitness y nutrición. No te extiendas demasiado, se ordenado`;
+    }
 
     const response = await axios.post(
         'https://openrouter.ai/api/v1/chat/completions',
         {
-            model: 'deepseek/deepseek-r1-0528:free',
+            model: 'meta-llama/llama-4-scout', // Cambio del modelo
             messages: [
-                { role: 'system', content: 'Eres un entrenador personal experto en fitness.' },
+                { role: 'system', content: 'Entrenador personal experto en fitness y nutrición.' },
                 { role: 'user', content: prompt }
             ]
         },
@@ -48,11 +62,10 @@ Tu tono debe ser profesional pero cercano, y siempre en español.
                 'X-Title': 'FitManage-AI-Chat'
             }
         }
-
     );
 
     return response.data.choices[0].message.content;
-};
+}
 
 export default {
     generarRutinaConIA,
