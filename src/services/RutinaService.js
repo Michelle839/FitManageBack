@@ -63,6 +63,7 @@ Proporciona una respuesta profesional, específica y basada en tu experiencia en
             }
         }
     );
+    console.log('Respuesta completa de OpenRouter:', response.data);
 
     return response.data.choices[0].message.content;
 }
